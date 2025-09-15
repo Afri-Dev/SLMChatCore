@@ -1,0 +1,6 @@
+Model: sentence-transformers/all-MiniLM-L6-v2
+Input names: ['input_ids', 'attention_mask']
+Output names: ['last_hidden_state']
+
+To use this model in Android, use ONNX Runtime for Android.
+The tokenizer directory contains the necessary files for text preprocessing.
