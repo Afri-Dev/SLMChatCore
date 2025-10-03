@@ -40,7 +40,7 @@ git push origin main
 4. Connect GitHub → Select `SLMChatCore`
 5. Settings:
    - Build: `pip install -r requirements.txt`
-   - Start: `uvicorn faq_api:app --host 0.0.0.0 --port $PORT`
+   - Start: `python faq_api.py`
 6. Click **Create**
 
 ### 3. Wait 10-15 min for deployment
