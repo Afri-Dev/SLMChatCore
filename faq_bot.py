@@ -21,10 +21,14 @@ class FAQBot:
             convert_to_tensor=True
         )
         
-        # Initialize NLTK
-        nltk.download('punkt')
-        nltk.download('stopwords')
-        self.stop_words = set(stopwords.words('english'))
+        # Initialize NLTK (download quietly to avoid blocking)
+        try:
+            nltk.download('punkt', quiet=True)
+            nltk.download('stopwords', quiet=True)
+            self.stop_words = set(stopwords.words('english'))
+        except Exception as e:
+            # If NLTK download fails, use empty stopwords set
+            self.stop_words = set()
     
     def clean_text(self, text):
         # Convert to string if not already
