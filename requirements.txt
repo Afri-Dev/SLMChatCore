@@ -14,6 +14,7 @@ onnx==1.19.0
 sentencepiece==0.2.1
 fastapi==0.104.1
 uvicorn[standard]==0.24.0
+gunicorn==21.2.0
 python-multipart==0.0.6
 # tensorflow-text==2.20.0  # Not compatible with Python 3.13
 # tf2onnx  # Build/protobuf conflicts with Python 3.13 and tensorflow 2.20.0
