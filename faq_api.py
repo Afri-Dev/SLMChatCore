@@ -4,7 +4,6 @@ from pydantic import BaseModel
 from typing import List, Optional
 import logging
 import os
-from faq_bot import FAQBot
 import uvicorn
 
 # Configure logging
@@ -36,6 +35,8 @@ def get_faq_bot():
     if faq_bot is None:
         logger.info("Loading FAQ Bot model...")
         try:
+            # Import FAQBot only when needed
+            from faq_bot import FAQBot
             faq_bot = FAQBot()
             logger.info("FAQ Bot model loaded successfully!")
         except Exception as e:
