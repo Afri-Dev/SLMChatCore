@@ -2,7 +2,6 @@ import numpy as np
 import pandas as pd
 from sentence_transformers import SentenceTransformer
 from scipy.spatial.distance import cosine
-import tensorflow as tf
 import nltk
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
