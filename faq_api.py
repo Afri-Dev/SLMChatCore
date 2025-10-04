@@ -175,9 +175,8 @@ if __name__ == "__main__":
     # Read port from environment variable (for Render.com) or default to 8000
     port = int(os.environ.get("PORT", 8000))
     uvicorn.run(
-        "faq_api:app",
+        app,  # Changed from "faq_api:app" to app
         host="0.0.0.0",
         port=port,
-        reload=True,
         log_level="info"
     )
