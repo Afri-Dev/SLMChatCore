@@ -27,14 +27,21 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Initialize FAQ Bot (this will load the model on startup)
-logger.info("Loading FAQ Bot model...")
-try:
-    faq_bot = FAQBot()
-    logger.info("FAQ Bot model loaded successfully!")
-except Exception as e:
-    logger.error(f"Failed to load FAQ Bot: {str(e)}")
-    faq_bot = None
+# Initialize FAQ Bot as None (will be loaded on first request)
+faq_bot = None
+
+def get_faq_bot():
+    """Lazy load FAQ Bot on first request"""
+    global faq_bot
+    if faq_bot is None:
+        logger.info("Loading FAQ Bot model...")
+        try:
+            faq_bot = FAQBot()
+            logger.info("FAQ Bot model loaded successfully!")
+        except Exception as e:
+            logger.error(f"Failed to load FAQ Bot: {str(e)}")
+            raise
+    return faq_bot
 
 # Pydantic models for request/response
 class QueryRequest(BaseModel):
@@ -93,9 +100,8 @@ async def query_faq(request: QueryRequest):
     - **min_score**: Minimum similarity score to include (default: 0.0, range: 0.0-1.0)
     """
     try:
-        # Validate FAQ bot is loaded
-        if faq_bot is None:
-            raise HTTPException(status_code=503, detail="FAQ Bot model is not available")
+        # Load FAQ bot on first request (lazy loading)
+        bot = get_faq_bot()
         
         # Validate input
         if not request.question.strip():
@@ -108,7 +114,7 @@ async def query_faq(request: QueryRequest):
         logger.info(f"Processing query: '{request.question[:50]}...' (top_k={top_k}, min_score={min_score})")
         
         # Get results from FAQ bot
-        results = faq_bot.get_most_similar(request.question, top_k=top_k)
+        results = bot.get_most_similar(request.question, top_k=top_k)
         
         # Filter by minimum score and format results
         filtered_results = [
