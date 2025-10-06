@@ -43,18 +43,22 @@ class FAQBot:
         tokens = [word for word in tokens if word not in self.stop_words and len(word) > 2]
         return ' '.join(tokens)
     
-    def _format_response(self, text, max_length=500):
-        """Format the response text with line breaks and optional summarization"""
+    def _format_response(self, text, max_length=1000):
+        """Format the response text with line breaks for better readability"""
+        # Clean up the text
+        text = str(text).strip()
+        
         # Add line breaks after periods for better readability
         text = text.replace('. ', '.\n\n')
         
-        # If the text is too long, summarize it
+        # Only truncate if extremely long (over 1000 chars)
         if len(text) > max_length:
-            # Simple summarization by taking the first few sentences
+            # Keep more content - take first 5 sentences instead of 3
             sentences = text.split('.')
-            if len(sentences) > 3:
-                summary = '.'.join(sentences[:3]) + '... [Response truncated. Ask for more details if needed.]'
+            if len(sentences) > 5:
+                summary = '.'.join(sentences[:5]) + '.\n\n[Response truncated. Ask for more details if needed.]'
                 return summary
+        
         return text
     
     def get_most_similar(self, query, top_k=3):
